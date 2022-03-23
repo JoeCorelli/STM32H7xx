@@ -29,6 +29,11 @@ void SystemClock_Config(void);
 
 int main(void)
 {
+
+	// Enable I-Cache & D-Cache
+	SCB_EnableICache();
+	SCB_EnableDCache();
+
     HAL_Init();
     SystemClock_Config();
 
