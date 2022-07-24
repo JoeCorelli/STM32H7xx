@@ -173,21 +173,20 @@ void spi_init (void)
     }
 }
 
-// set the SSI speed to the max setting
+// set the SPI speed to the max setting
 void spi_set_max_speed (void)
 {
-    spi_port.Instance->CFG1 &= ~SPI_BAUDRATEPRESCALER_256;
-    spi_port.Instance->CFG1 |= SPI_BAUDRATEPRESCALER_4; // should be able to go to 12Mhz...
+    __HAL_SPI_DISABLE(&spi_port);
+    MODIFY_REG(spi_port.Instance->CFG1, SPI_CFG1_MBR, SPI_BAUDRATEPRESCALER_2); // should be able to go to 24Mhz...
+    __HAL_SPI_ENABLE(&spi_port);
 }
 
 uint32_t spi_set_speed (uint32_t prescaler)
 {
-    uint32_t cur = spi_port.Instance->CFG1 & SPI_BAUDRATEPRESCALER_256;
-
-    spi_port.Instance->CFG1 &= ~SPI_BAUDRATEPRESCALER_256;
-    spi_port.Instance->CFG1 |= prescaler;
-
-    return cur;
+    __HAL_SPI_DISABLE(&spi_port);
+    MODIFY_REG(spi_port.Instance->CFG1, SPI_CFG1_MBR, prescaler);
+    __HAL_SPI_ENABLE(&spi_port);
+    return prescaler;
 }
 
 uint8_t spi_get_byte (void)
