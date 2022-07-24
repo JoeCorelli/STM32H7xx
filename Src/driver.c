@@ -1659,6 +1659,9 @@ static bool driver_setup (settings_t *settings)
         GPIO_Init.Pin = outputpin[i].bit = 1 << outputpin[i].pin;
         GPIO_Init.Mode = outputpin[i].mode.open_drain ? GPIO_MODE_OUTPUT_OD : GPIO_MODE_OUTPUT_PP;
         HAL_GPIO_Init(outputpin[i].port, &GPIO_Init);
+
+        if(outputpin[i].group == PinGroup_MotorChipSelect || outputpin[i].group == PinGroup_MotorUART)
+            DIGITAL_OUT(outputpin[i].port, 1 << outputpin[i].pin, 1);
     }
 
     GPIO_Init.Mode = GPIO_MODE_OUTPUT_PP;
