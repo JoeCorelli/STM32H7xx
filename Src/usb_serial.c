@@ -73,13 +73,21 @@ static inline bool usb_write (void)
 
     txbuf.s = txbuf.use_tx2data ? txbuf.data2 : txbuf.data;
 
+#ifdef STM32H723xx
+    while(CDC_Transmit_HS((uint8_t *)txbuf.s, txbuf.length) == USBD_BUSY) {
+#else
     while(CDC_Transmit_FS((uint8_t *)txbuf.s, txbuf.length) == USBD_BUSY) {
+#endif
         if(!hal.stream_blocking_callback())
             return false;
     }
 
     if(txbuf.length % 64 == 0) {
+#ifdef STM32H723xx
+        while(CDC_Transmit_HS(&dummy, 0) == USBD_BUSY) {
+#else
         while(CDC_Transmit_FS(&dummy, 0) == USBD_BUSY) {
+#endif
             if(!hal.stream_blocking_callback())
                 return false;
         }
@@ -101,7 +109,11 @@ static bool usbPutC (const char c)
 
     *buf = c;
 
+#ifdef STM32H723xx
+    while(CDC_Transmit_HS(buf, 1) == USBD_BUSY) {
+#else
     while(CDC_Transmit_FS(buf, 1) == USBD_BUSY) {
+#endif
         if(!hal.stream_blocking_callback())
             return false;
     }
