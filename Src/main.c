@@ -175,7 +175,7 @@ void SystemClock_Config(void)
     RCC_OscInitStruct.PLL.PLLVCOSEL = RCC_PLL1VCOWIDE;
     RCC_OscInitStruct.PLL.PLLFRACN = 0;
 
-#else // Common configuration for WeAct MiniSTM32H7xx and BTT SKR3 with 8MHz crystals
+#else // Common configuration for WeAct MiniSTM32H7xx and BTT SKR3 with 25MHz crystals
 #define FLASH_LATENCY FLASH_LATENCY_4
 
 #if RTC_ENABLE
@@ -198,6 +198,29 @@ void SystemClock_Config(void)
 #endif // H743 WeAct Mini and BTT SKR3
 
 #elif defined (STM32H723xx)
+
+#if defined(NUCLEO_H723) // Nucleo dev board with 8MHz clock source
+#define FLASH_LATENCY FLASH_LATENCY_3
+
+#if RTC_ENABLE
+    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE|RCC_OSCILLATORTYPE_LSE;
+    RCC_OscInitStruct.LSEState = RCC_LSE_ON;
+#else
+    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+#endif
+    RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+    RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+    RCC_OscInitStruct.PLL.PLLM = 2;
+    RCC_OscInitStruct.PLL.PLLN = 120;
+    RCC_OscInitStruct.PLL.PLLP = 1;
+    RCC_OscInitStruct.PLL.PLLQ = 10;
+    RCC_OscInitStruct.PLL.PLLR = 1;
+    RCC_OscInitStruct.PLL.PLLRGE = RCC_PLL1VCIRANGE_2;
+    RCC_OscInitStruct.PLL.PLLVCOSEL = RCC_PLL1VCOWIDE;
+    RCC_OscInitStruct.PLL.PLLFRACN = 0;
+
+#else // BTT SKR3 with 25MHz crystal
 #define FLASH_LATENCY FLASH_LATENCY_3
 
 #if RTC_ENABLE
@@ -218,6 +241,7 @@ void SystemClock_Config(void)
     RCC_OscInitStruct.PLL.PLLVCOSEL = RCC_PLL1VCOWIDE;
     RCC_OscInitStruct.PLL.PLLFRACN = 0;
 #endif // STM32H723xx BTT SKR3
+#endif // STM32H723xx
 
     /** Initializes the RCC Oscillators according to the specified parameters
     * in the RCC_OscInitTypeDef structure.
