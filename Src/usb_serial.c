@@ -247,7 +247,8 @@ const io_stream_t *usbInit (void)
     return &stream;
 }
 
-// NOTE: add a call to this function as the first line CDC_Receive_FS() in usbd_cdc_if.c
+// NOTE: A call to this function should be added as the first line of CDC_Receive_FS() & CDC_Receive_HS().
+//       These are found in the usbd_cdc_if.c support files for H743 and H723 parts.
 void usbBufferInput (uint8_t *data, uint32_t length)
 {
     while(length--) {
