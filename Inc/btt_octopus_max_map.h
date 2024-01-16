@@ -187,7 +187,7 @@
 
 #elif TRINAMIC_SPI_ENABLE
 
-#define TRINAMIC_SOFT_SPI            // The BTT Octopus MAX uses software SPI4 for Trinamic drivers
+#define TRINAMIC_SOFT_SPI           // The BTT Octopus MAX uses software SPI4 for Trinamic drivers
 
 #define TRINAMIC_MOSI_PORT          GPIOE
 #define TRINAMIC_MOSI_PIN           14
